@@ -1,20 +1,50 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HomePage = (user) => {
-  console.log('UserInfo:',user);
-  if (user) {
-    console.log(user);
-  }
+const HomePage = () => {
+  // console.log('UserInfo:',user);
+  // if (user) {
+  //   console.log(user);
+  // }
 
   const navigation = useNavigation();
+  const [user, setUser] = React.useState(null);
+  const [userStored, setUserStored] = React.useState(null);
+
+  async function isLogged(){
+		setUserStored(await AsyncStorage.getItem("@user"));
+		if (userStored) {
+				setUser(JSON.parse(userStored));
+			}
+	}
+
+	React.useEffect(() => {
+    isLogged();
+  }, [userStored]);
+
+  console.log('user:', user);
+
+  const ShowUserInfo = ({user})=>{
+		console.log(user);
+		// setuserData({firstname : user?.given_name})
+		return(
+			<View style={styles.container}>
+				<Text style={styles.text}>Name: {user.name}</Text>
+				<Text style={styles.text}>Email: {user?.email}</Text>
+				<Image source={{uri: user?.picture}} style={{width:100, height:100, borderRadius: 50}} />
+			</View>
+		)
+	}
     
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>¡Bienvenido a Finanza Personal!</Text>
-
+      {
+        user? <ShowUserInfo user={user} /> : <Text>"Not logued yet"</Text>
+      }
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('LoginScreen')}
@@ -48,8 +78,5 @@ const styles = StyleSheet.create({
       fontWeight: 'bold', // Peso de fuente en negrita
     },
   });
-
-
-
 
 export default HomePage;

@@ -131,14 +131,19 @@ const GoogleLogin = () => {
   return (
     <View style={styles.container}>
         <Text>GoogleLogin</Text>
-		<Button title='Sign in with Google' onPress={() => promptAsync()}>Sign in</Button>
+		<Button title='Sign in with Google' onPress={() => promptAsync()}></Button>
 		{
 			
-			// userInfo? navigation.navigate("HomePage")  : <Text>"Not logued yet"</Text>
-			userInfo? <ShowUserInfo user={userInfo} /> : <Text>"Not logued yet"</Text>
+			userInfo? navigation.navigate("HomePage")  : <Text>"Not logued yet"</Text>
+			// userInfo? (
+			// 	<>
+			// 		<ShowUserInfo user={userInfo} />
+			// 	</>
+				
+			// ) : <Text>"Not logued yet"</Text>
 			
 		}
-        <StatusBar style='auto'/>
+	    <StatusBar style='auto'/>
 		<Button title='Log out' onPress={() => AsyncStorage.removeItem("@user")}>Log off</Button>
 		
     </View>
